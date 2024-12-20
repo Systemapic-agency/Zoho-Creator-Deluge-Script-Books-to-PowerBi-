@@ -1,0 +1,36 @@
+org_id = "721563047";
+// Your organization ID
+// Fetch all vendors
+res = zoho.books.getRecords("vendors",org_id);
+// info res; // Log the raw response to inspect the output
+data = res.getJson("contacts");
+// info data ;
+for each  getData in data
+{
+	ven_name = getData.getJSON("vendor_name");
+	company_name = getData.getJSON("company_name");
+	email = getData.getJSON("email");
+	phone = getData.getJSON("phone");
+	res2 = zoho_vendors[Name == ven_name].count(ID);
+	if(res2 == 0)
+	{
+		insert into zoho_vendors
+		[
+			Added_User=zoho.loginuser
+			Company_Name=company_name
+			Email=email
+			Name=ven_name
+			Work_Phone=phone
+		]
+	}
+	else
+	{
+		update zoho_vendors[Name == ven_name]
+		[
+			Company_Name=company_name
+			Email=email
+			Name=ven_name
+			Work_Phone=phone
+		];
+	}
+}

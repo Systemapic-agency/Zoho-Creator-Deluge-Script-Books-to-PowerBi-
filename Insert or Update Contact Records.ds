@@ -1,0 +1,49 @@
+for each  getData in contacts1
+{
+    id = getData.getJSON("contact_id");
+    name = getData.getJSON("contact_name");
+    email = getData.getJson("email");
+    ph_num = getData.getJson("phone");
+    Vendor_name = getData.getJSON("vendor_name");
+    Currency_id = getData.getJSON("currency_id");
+    Currency_code = getData.getJSON("currency_code");
+    Outstanding_receivable_amount = getData.getJSON("outstanding_receivable_amount");
+    Portal_status = getData.getJSON("portal_status");
+    Last_modified_time_formatted = getData.getJSON("last_modified_time_formatted");
+
+    res2 = Zoho_Book_Contacts[zoho_bookcontacts_id == id].count(ID);
+    
+    if(res2 == 0)
+    {
+        insert into Zoho_Book_Contacts
+        [
+            Added_User=zoho.loginuser
+            Email=email
+            Name=name
+            Phone_Number=ph_num
+            currency_code=Currency_code
+            Sync="synced"
+            currency_id=Currency_id
+            last_modified_time_formatted=Last_modified_time_formatted
+            outstanding_receivable_amount=Outstanding_receivable_amount
+            portal_status=Portal_status
+            vendor_name=Vendor_name
+            zoho_bookcontacts_id=id
+        ]
+    }
+    else
+    {
+        update Zoho_Book_Contacts[zoho_bookcontacts_id == id]
+        [
+            Email=email
+            Name=name
+            Phone_Number=ph_num
+            currency_code=Currency_code
+            currency_id=Currency_id
+            last_modified_time_formatted=Last_modified_time_formatted
+            outstanding_receivable_amount=Outstanding_receivable_amount
+            portal_status=Portal_status
+            vendor_name=Vendor_name
+        ];
+    }
+}

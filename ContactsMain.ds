@@ -1,0 +1,91 @@
+today = zoho.currentdate;
+yesterday = zoho.currentdate.addDay(-1);
+org_id = "721563047";
+page = 1;
+iterations = 16;
+iterationString = "".leftPad(iterations).replaceAll(" ",",").toList().subList(0,iterations);
+for each  el in iterationString
+{
+	contacts = zoho.books.getRecords("contacts",org_id,"page=" + page + "&per_page=300");
+	page = page + 1;
+	checkMorePages = contacts.get("page_context").getJSON("has_more_page");
+	contacts1 = contacts.getJSON("contacts");
+	// Extract contacts array
+	// 	info contacts;
+	// Check if the contacts list is not null
+	for each  contact in contacts1
+	{
+		// 		recordDate = contact.getJSON("last_modified_time");
+		// 		lastModifiedDate = recordDate.toDateTimeString("yyyy-MM-dd'T'HH:mm:ssZ","GG");
+		// 		modifedDate = toDateTime(lastModifiedDate,"yyyy-MM-dd'T'HH:mm:ssZ");
+		// 		if(modifedDate >= yesterday && modifedDate < today)
+		// 		{
+		// Fetch specific fields for each contact
+		contactId = contact.getJSON("contact_id");
+		contact_name = contact.getJSON("contact_name");
+		customer_name = contact.getJSON("customer_name");
+		vendor_name = contact.getJSON("vendor_name");
+		company_name = contact.getJSON("company_name");
+		email = contact.getJSON("email");
+		phone = contact.getJSON("phone");
+		res2 = zohobooks_contacts[contact_id == contactId].count(ID);
+		if(res2 == 0)
+		{
+			insert into zohobooks_contacts
+			[
+				Added_User=zoho.loginuser
+				Email=email
+				Phone=phone
+				company_name=company_name
+				contact_id=contactId
+				contact_name=contact_name
+				Sync="synced"
+				customer_name=customer_name
+			]
+		}
+		else
+		{
+			update zohobooks_contacts[contact_id == contactId]
+			[
+				Email=email
+				Phone=phone
+				company_name=company_name
+				contact_id=contactId
+				contact_name=contact_name
+				customer_name=customer_name
+			];
+		}
+	}
+	if(checkMorePages = false)
+	{
+		break;
+	}
+}
+for each  own in zohobooks_contacts
+{
+	id = own.contact_id;
+	sync_status = own.Sync;
+	isSynced = false;
+	for each  DATA in contacts1
+	{
+		book_id = DATA.getJSON("contact_id");
+		if(id == book_id)
+		{
+			isSynced = true;
+			break;
+		}
+	}
+	if(isSynced)
+	{
+		own.Sync="synced";
+	}
+	else
+	{
+		own.Sync="UNsynced";
+	}
+	if(own.Sync == "UNsynced")
+	{
+		delete from zohobooks_contacts[contact_id = id];
+		info "Delete Record " = own.contact_name;
+	}
+}

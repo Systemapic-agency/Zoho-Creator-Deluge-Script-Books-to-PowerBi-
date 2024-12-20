@@ -1,0 +1,56 @@
+org_id = "721563047";
+// Your organization ID
+res = zoho.books.getRecords("salesorders",org_id);
+// Use "estimates" instead of "quotes"
+data = res.get("salesorders");
+// info data ;	q
+for each  getData in data
+{
+	date = getData.getJSON("date");
+	packed_status = getData.getJSON("status");
+	reference = getData.getJSON("reference_number");
+	cust_name = getData.getJSON("customer_name");
+	order_status = getData.getJSON("order_status");
+	salesOrder = getData.getJSON("salesorder_number");
+	inv_status = getData.getJSON("invoiced_status");
+	paid_status = getData.getJSON("paid_status");
+	shipped_status = getData.getJSON("shipped_status");
+	amount = getData.getJSON("total");
+	delivery = getData.getJSON("delivery_method");
+	res2 = zoho_salesorder[sales_order == salesOrder].count(ID);
+	if(res2 == 0)
+	{
+		insert into zoho_salesorder
+		[
+			Added_User=zoho.loginuser
+			Amount=amount
+			Customer_Name=cust_name
+			Dilevery_Method=delivery
+			Invoice=inv_status
+			Order_Status=order_status
+			Packed=packed_status
+			Payment=paid_status
+			Refrence_Number=reference
+			Shipped=shipped_status
+			date_field=date
+			sales_order=salesOrder
+		]
+	}
+	else
+	{
+		update zoho_salesorder[sales_order == salesOrder]
+		[
+			Amount=amount
+			Customer_Name=cust_name
+			Dilevery_Method=delivery
+			Invoice=inv_status
+			Order_Status=order_status
+			Packed=packed_status
+			Payment=paid_status
+			Refrence_Number=reference
+			Shipped=shipped_status
+			date_field=date
+			sales_order=salesOrder
+		];
+	}
+}

@@ -1,0 +1,29 @@
+for each  i in Zoho_Book_Contacts
+{
+    contact_id = i.zoho_bookcontacts_id;
+    sync_status = i.Sync;
+    isSync = false;
+    for each  DATA in contacts1
+    {
+        zohoBookId = DATA.getJSON("contact_id");
+        if(contact_id == zohoBookId)
+        {
+            isSync = true;
+            break;
+        }
+    }
+
+    if(isSync)
+    {
+        sync_status = "synced";
+    }
+    else
+    {
+        sync_status = "UNsynced";
+    }
+
+    if(sync_status == "UNsynced")
+    {
+        delete from Zoho_Book_Contacts[zoho_bookcontacts_id == contact_id];
+    }
+}

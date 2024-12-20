@@ -1,0 +1,11 @@
+org_id = "872863784";
+page = 1;
+iterations = 1;
+iterationString = "".leftPad(iterations).replaceAll(" ",",").toList().subList(0,iterations);
+for each  el in iterationString
+{
+    contacts = zoho.books.getRecords("contacts", org_id, "page=" + page + "&per_page=300");
+    page = page + 1;
+    checkMorePages = contacts.get("page_context").getJSON("has_more_page");
+    contacts1 = contacts.getJSON("contacts");
+}

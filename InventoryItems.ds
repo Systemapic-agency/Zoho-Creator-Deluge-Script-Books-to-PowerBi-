@@ -1,0 +1,46 @@
+org_id = "721563047";
+res = zoho.books.getRecords("items",org_id);
+data = res.get("items");
+// info data ;
+for each  getData in data
+{
+	name = getData.getJSON("name");
+	sku = getData.getJSON("sku");
+	purch_des = getData.getJSON("purchase_description");
+	purch_rate = getData.getJSON("purchase_rate");
+	desc = getData.getJSON("description");
+	rate = getData.getJSON("rate");
+	stock_on_hand = getData.getJSON("stock_on_hand");
+	use_unit = getData.getJSON("unit");
+	res2 = zoho_inventory_items[Name == name].count(ID);
+	// res2=0;
+	if(res2 == 0)
+	{
+		insert into zoho_inventory_items
+		[
+			Added_User=zoho.loginuser
+			Description=desc
+			Name=name
+			Purchase_Description=purch_des
+			Purchase_Rate=purch_rate
+			Rate=rate
+			SKU=sku
+			Stock_On_Hand=stock_on_hand
+			Usage_Unit=use_unit
+		]
+	}
+	else
+	{
+		update zoho_inventory_items[Name == name]
+		[
+			Description=desc
+			Name=name
+			Purchase_Description=purch_des
+			Purchase_Rate=purch_rate
+			Rate=rate
+			SKU=sku
+			Stock_On_Hand=stock_on_hand
+			Usage_Unit=use_unit
+		];
+	}
+}

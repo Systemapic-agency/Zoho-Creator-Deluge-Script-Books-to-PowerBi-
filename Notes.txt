@@ -1,0 +1,14 @@
+ Key Variables
+Heading: Key Variables Used in the Script
+org_id = "872863784";          // Zoho Books organization ID
+today = zoho.currentdate;      // Current date
+yesterday = zoho.currentdate.addDay(-1);  // Previous date
+page = 1;                      // Pagination for API requests
+iterations = 1;                // Number of iterations to run
+iterationString = "".leftPad(iterations).replaceAll(" ",",").toList().subList(0,iterations);  // Used to control iteration
+
+
+Explanation:
+•	org_id: Specifies the organization ID for Zoho Books.
+•	page: Keeps track of pagination when retrieving records.
+•	iterations: Controls how many times the script should loop (for future scalability).
